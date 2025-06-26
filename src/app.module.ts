@@ -4,13 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports:     [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject:  [ConfigService],
       useFactory: (config: ConfigService) => {
         const logger    = new Logger("TypeOrmModule");
-        const hostname  = config.get<string>("DB_HOST");
-        const port      = config.get<number>("DB_PORT");
+        const hostname  = config.get<string>("DB_HOST") || 'localhost';
+        const port      = config.get<number>("DB_PORT") || 5432;
         const user      = config.get<string>("DB_USER");
         const password  = config.get<string>("DB_PASS");
 
