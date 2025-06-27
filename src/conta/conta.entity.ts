@@ -1,6 +1,6 @@
 import { ETipoConta } from "src/types/index.enum";
 import { Usuario } from "src/usuario/usuario.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Conta {
@@ -29,6 +29,6 @@ export class Conta {
     @CreateDateColumn({type: "timestamptz"})
         criado_em: Date;
     
-    @CreateDateColumn({type: "timestamptz"})
+    @UpdateDateColumn({type: "timestamptz"})
     atualizado_em: Date
 }
