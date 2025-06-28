@@ -6,6 +6,7 @@ import { ContaModule } from './conta/conta.module';
 import { CategoriaModule } from './categoria/categoria.module';
 import { FormaPagamentoModule } from './forma_pagamento/forma_pagamento.module';
 import { TransacaoModule } from './transacao/transacao.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports:     [
@@ -46,7 +47,8 @@ import { TransacaoModule } from './transacao/transacao.module';
     ContaModule,
     CategoriaModule,
     FormaPagamentoModule,
-    TransacaoModule
+    TransacaoModule,
+    AuthModule
   ],
   controllers: [],
   providers:   [],
