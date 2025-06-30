@@ -1,10 +1,8 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Conta } from "./conta.entity";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Conta } from './conta.entity';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Conta])
-    ]
+  imports:     [TypeOrmModule.forFeature([Conta])],
 })
-export class ContaModule{}
+export class ContaModule {}
