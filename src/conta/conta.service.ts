@@ -3,6 +3,8 @@ import { Conta } from "./conta.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CriarContaDTO } from "./dtos/criar-conta.dto";
 import { Usuario } from "src/usuario/usuario.entity";
+import { ForbiddenException, NotFoundException } from "@nestjs/common";
+import { AtualizarContaDTO } from "./dtos/atualizar-conta.dto";
 
 export class ContaService {
     constructor(
@@ -30,7 +32,7 @@ export class ContaService {
             const conta_db = await qrunner.manager.save(conta);
 
             if(!queryRunner) 
-                await qrunner.rollbackTransaction();
+                await qrunner.commitTransaction();
             return conta_db
         } catch (error) {
             if(!queryRunner) 
@@ -41,4 +43,45 @@ export class ContaService {
                 await qrunner.release();
         }
     }
+
+    async buscarTodas(auth: Partial<Usuario>){
+        const contas = await this.repository.find({ where: { usuario:{ id: auth.id }}});
+        if(contas.length === 0) 
+            throw new NotFoundException("Nenhuma conta encontrada");
+
+        return contas;
+    }
+
+    async buscarUm(id: string, auth: Partial<Usuario>){
+        const conta = await this.repository.findOne({ where: { id, usuario: {id:auth.id}}});
+        if(!conta) 
+            throw new NotFoundException("Conta não encontrada");
+
+        return conta;
+    }
+
+    async atualizar(id: string, data: AtualizarContaDTO, auth: Partial<Usuario>){
+        const conta = await this.buscarUm(id, auth);
+
+        await this.repository.update(conta.id, {
+            ...data
+        })
+    }
+
+    async deletar(id: string, auth: Partial<Usuario>){
+        try 
+        {
+            const conta = await this.buscarUm(id, auth);
+            if(conta.is_carteira)
+                throw new ForbiddenException("");
+
+            await this.repository.delete(conta.id);
+
+            return conta.titulo    
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
 }
